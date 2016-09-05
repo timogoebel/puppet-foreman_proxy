@@ -294,10 +294,10 @@ describe 'foreman_proxy::config' do
             end
           end
           it 'should generate efi image from grub2 modules' do
-            should contain_foreman_proxy__tftp__exec('build-grub2-efi-image')
+            should contain_exec('build-grub2-efi-image')
           end
-          it 'should create shim.efi symlink for Red Hat version 6 and older' do
-            should contain_foreman_proxy__tftp__file('/var/lib/tftpboot/grub/shim.efi').with_ensure('link')
+          it 'should create shim.efi symlink for Debian' do
+            should contain_file('/srv/tftp/grub2/shim.efi').with_ensure('link')
           end
         elsif facts[:osfamily] == 'RedHat'
           it 'should copy the correct default files for Red Hat' do
@@ -314,7 +314,7 @@ describe 'foreman_proxy::config' do
             it { should contain_package('grub2-tools').with_ensure('installed') }
             it { should contain_package('shim').with_ensure('installed') }
             it 'should generate efi image from grub2 modules' do
-              should contain_foreman_proxy__tftp__exec('build-grub2-efi-image')
+              should contain_exec('build-grub2-efi-image')
             end
             case facts[:operatingsystem]
               when /^(RedHat|Scientific|OracleLinux)$/
@@ -333,10 +333,10 @@ describe 'foreman_proxy::config' do
           else
             it { should contain_package('grub').with_ensure('installed') }
             it 'should copy grub1 files for Red Hat version 6 and older' do
-              should contain_foreman_proxy__tftp__file('/var/lib/tftpboot/grub/grubx64.efi')
+              should contain_file('/var/lib/tftpboot/grub/grubx64.efi')
             end
             it 'should create shim.efi symlink for Red Hat version 6 and older' do
-              should contain_foreman_proxy__tftp__file('/var/lib/tftpboot/grub/shim.efi').with_ensure('link')
+              should contain_file('/var/lib/tftpboot/grub/shim.efi').with_ensure('link')
             end
           end
         end
